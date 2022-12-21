@@ -1,0 +1,36 @@
+[gd_scene format=2]
+
+[node name="Instructions" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -624.0
+margin_bottom = -300.0
+rect_pivot_offset = Vector2( -421, -85 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+margin_right = 400.0
+margin_bottom = 300.0
+color = Color( 0, 0, 0, 0.87451 )
+
+[node name="Description" type="RichTextLabel" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+margin_right = 390.0
+margin_bottom = 287.0
+text = "Planet Movement Demo
+
+This scene demonstrates basic planet movement.
+
+ > Left Controller:
+   - Turning: L/R Joystick
+   - Jumping: Trigger Button
+   
+ > Right Controller:
+   - Direct Movement: U/D/L/R Joystick
+
+Planet has several exposed values that affect the behavior of the movement:
+
+   - Gravity modifier
+   - Rotation axis
+   - Rotation speed
+"
