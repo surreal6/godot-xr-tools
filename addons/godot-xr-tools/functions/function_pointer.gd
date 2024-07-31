@@ -117,6 +117,10 @@ var material : ShaderMaterial
 
 var gaze_pressed = false
 
+## 0 no new no last , 1: only new, 2 only last, 3 new != last, 4 new == last
+var target_state = 0
+var old_target_state = 0
+
 #######
 
 
@@ -255,10 +259,19 @@ func _process(delta):
 
 	# If no current or previous collisions then skip
 	if not new_target and not last_target:
+		## 0 no new no last , 1: only new, 2 only last, 3 new != last, 4 new == last
+		target_state = 0
+		if old_target_state != target_state:
+			DebugKonsole.print("0 nothing", false)
+		old_target_state = target_state
 		return
 
 	# Handle pointer changes
 	if new_target and not last_target:
+		## 0 no new no last , 1: only new, 2 only last, 3 new != last, 4 new == last
+		target_state = 1
+		if old_target_state != target_state:
+			DebugKonsole.print("1 only new", false)
 		# Pointer entered new_target
 		XRToolsPointerEvent.entered(self, new_target, new_at)
 
@@ -273,6 +286,10 @@ func _process(delta):
 		# Update visible artifacts for hit
 		_visible_hit(new_at)
 	elif not new_target and last_target:
+		## 0 no new no last , 1: only new, 2 only last, 3 new != last, 4 new == last
+		target_state = 2
+		if old_target_state != target_state:
+			DebugKonsole.print("2 only last", false)
 		# Pointer exited last_target
 		XRToolsPointerEvent.exited(self, last_target, last_collided_at)
 		
@@ -283,6 +300,10 @@ func _process(delta):
 		# Update visible artifacts for miss
 		_visible_miss()
 	elif new_target != last_target:
+		## 0 no new no last , 1: only new, 2 only last, 3 new != last, 4 new == last
+		target_state = 3
+		if old_target_state != target_state:
+			DebugKonsole.print("3 new != last", false)
 		# Pointer exited last_target
 		XRToolsPointerEvent.exited(self, last_target, last_collided_at)
 		
@@ -304,6 +325,11 @@ func _process(delta):
 		# Move visible artifacts
 		_visible_move(new_at)
 	elif new_at != last_collided_at:
+		## 0 no new no last , 1: only new, 2 only last, 3 new != last, 4 new == last
+		target_state = 4
+		if old_target_state != target_state:
+			DebugKonsole.print("4 new == last", false)
+	
 		# Pointer moved on new_target
 		XRToolsPointerEvent.moved(self, new_target, new_at, last_collided_at)
 
@@ -318,6 +344,8 @@ func _process(delta):
 	# Update last values
 	last_target = new_target
 	last_collided_at = new_at
+	
+	old_target_state = target_state
 
 
 # Set pointer enabled property
@@ -490,9 +518,11 @@ func _button_pressed() -> void:
 		if _camera_parent:
 			_set_time_held(0.0)
 			gaze_pressed = true
+			DebugKonsole.print("pressed", false)
 			XRToolsPointerEvent.released(self, last_target, last_collided_at)
 			target = null
 			_set_time_held(0.0)
+			DebugKonsole.print("released", false)
 
 # Pointer-activation button released handler
 func _button_released() -> void:

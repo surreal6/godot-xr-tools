@@ -28,6 +28,9 @@ func _ready():
 
 	for teleporter in $Demos.get_children():
 		teleporter.connect("visibility_changed",_update_demo_positions)
+	
+	var camera_node = $XROrigin3D/XRCamera3D
+	DebugKonsole.setup_fixed_konsole(camera_node)
 
 
 func _on_Demos_child_entered_tree(_node):
